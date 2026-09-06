@@ -1,0 +1,20 @@
+# dsh-web-search-firecrawl bundle patch
+#
+# This file is the `dsh.bundle.patch` layer of the published npm package.
+# Installing the package with:
+#
+#   dsh plugin --profile <name> add dsh-web-search-firecrawl
+#
+# reconciles `dsh.profile.bundles` against installed packages and, seeing the
+# `dsh.bundle.patch` declaration, appends this package to the bundle stack.
+# The profile boot then merges THIS patch (a single `insert`) exactly like a
+# manual cordis.patch.yml mount line. No profile edits needed.
+#
+# It registers two ctx.web providers:
+#   - search provider id "firecrawl"        (POST /search)
+#   - fetch  provider id "firecrawl-scrape" (POST /scrape)
+# The search provider is independent of the conversation LLM provider, so it
+# works with any custom model gateway.
+- insert:
+    - id: web-search-firecrawl
+      name: 'dsh-web-search-firecrawl'
