@@ -1,20 +1,36 @@
-# dsh-web-search-firecrawl bundle patch
+# dsh-web-search bundle patch
 #
 # This file is the `dsh.bundle.patch` layer of the published npm package.
 # Installing the package with:
 #
-#   dsh plugin --profile <name> add dsh-web-search-firecrawl
+#   dsh plugin --profile <name> add dsh-web-search
 #
 # reconciles `dsh.profile.bundles` against installed packages and, seeing the
 # `dsh.bundle.patch` declaration, appends this package to the bundle stack.
-# The profile boot then merges THIS patch (a single `insert`) exactly like a
-# manual cordis.patch.yml mount line. No profile edits needed.
+# The profile boot then merges THIS patch exactly like a manual
+# cordis.patch.yml mount. No profile edits needed to get running.
 #
-# It registers two ctx.web providers:
-#   - search provider id "firecrawl"        (POST /search)
-#   - fetch  provider id "firecrawl-scrape" (POST /scrape)
-# The search provider is independent of the conversation LLM provider, so it
-# works with any custom model gateway.
+# It inserts the plugin row (vendor selection + API keys go in its config —
+# override this same row id in your profile cordis.patch.yml to configure)
+# and points the web seam at the plugin's fixed provider ids. The web-fetch
+# default stays on the built-in anonymous `http` provider (free, no vendor
+# credits); set `fetchProvider: dsh-web-fetch` in your profile patch after
+# configuring `fetch:` in the plugin config.
 - insert:
-    - id: web-search-firecrawl
-      name: 'dsh-web-search-firecrawl'
+    - id: web-search
+      name: 'dsh-web-search'
+      config:
+        # Vendor for web_search. Registered vendors: tavily, firecrawl.
+        # Add your own in lib/providers/ + lib/registry.js.
+        search: tavily
+        # Vendor for web_fetch. Omit (default) to register no fetch provider.
+        # fetch: tavily
+        providers:
+          tavily: {}
+          # firecrawl:
+          #   apiKey: 'fc-...'   # or export FIRECRAWL_API_KEY
+
+- id: web
+  config:
+    searchProvider: dsh-web-search
+    fetchProvider: http

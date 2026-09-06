@@ -1,7 +1,7 @@
 {
-  "name": "dsh-web-search-firecrawl",
-  "version": "0.1.0",
-  "description": "DSH web plugin: Firecrawl-backed web search and scrape providers for the ctx.web seam — works with any LLM provider.",
+  "name": "dsh-web-search",
+  "version": "0.2.0",
+  "description": "DSH web plugin: multi-vendor web_search / web_fetch providers for the ctx.web seam (Tavily, Firecrawl, extensible) — works with any LLM provider.",
   "type": "module",
   "main": "lib/index.js",
   "files": [
@@ -27,18 +27,19 @@
     "dsh",
     "dsh-plugin",
     "deepseek-harness",
-    "firecrawl",
     "web-search",
-    "scrape"
+    "web-fetch",
+    "tavily",
+    "firecrawl"
   ],
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/CBalaa/dsh-web-search-firecrawl.git"
+    "url": "git+https://github.com/CBalaa/dsh-web-search.git"
   },
-  "homepage": "https://github.com/CBalaa/dsh-web-search-firecrawl#readme",
+  "homepage": "https://github.com/CBalaa/dsh-web-search#readme",
   "bugs": {
-    "url": "https://github.com/CBalaa/dsh-web-search-firecrawl/issues"
+    "url": "https://github.com/CBalaa/dsh-web-search/issues"
   },
   "author": "CBalaa"
 }
