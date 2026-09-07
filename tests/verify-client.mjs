@@ -20,7 +20,7 @@ const React = require("react");
 let registration = null;
 globalThis.window = { __ModuleLoader__: { load: (reg) => (registration = reg) } };
 eval(readFileSync(new URL("../lib/client.js", import.meta.url), "utf8"));
-assert.equal(registration.id, "dsh-web-search");
+assert.equal(registration.id, "@balababa/dsh-web-search");
 
 const store = (v) => {
   let val = v;

@@ -3,7 +3,7 @@
 # This file is the `dsh.bundle.patch` layer of the published npm package.
 # Installing the package with:
 #
-#   dsh plugin --profile <name> add dsh-web-search
+#   dsh plugin --profile <name> add @balababa/dsh-web-search
 #
 # reconciles `dsh.profile.bundles` against installed packages and, seeing the
 # `dsh.bundle.patch` declaration, appends this package to the bundle stack.
@@ -18,7 +18,7 @@
 # configuring `fetch:` in the plugin config.
 - insert:
     - id: web-search
-      name: 'dsh-web-search'
+      name: '@balababa/dsh-web-search'
       config:
         # Vendor for web_search. Registered vendors: tavily, firecrawl.
         # Add your own in lib/providers/ + lib/registry.js.
