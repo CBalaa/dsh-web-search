@@ -14,41 +14,45 @@ The plugin registers under the **fixed** ids `dsh-web-search` (search) and
 `dsh-web-fetch` (fetch), so switching vendors never touches the web-seam row —
 one config line does it.
 
-## Build & install locally
+## Install
 
-This plugin is installed **from a local checkout** (it is not published to the
-npm registry). The plugin manager is `dsh plugin` — note that `dsh web` boots
-the UI and is not the plugin manager.
+Published to npm — install straight from the DSH CLI:
 
-### 1. Install build dependencies and build
+```sh
+# latest (or pin a version: @balababa/dsh-web-search@0.2.0)
+dsh plugin --profile web add @balababa/dsh-web-search
+```
+
+`dsh plugin add` forwards its argument to `pnpm add` inside the profile
+directory, then reconciles `dsh.profile.bundles`: because this package declares
+`dsh.bundle.patch`, `dsh-web-search` is appended to the bundle stack
+automatically — no manual `cordis.patch.yml` edit to mount it.
+
+Restart the web profile to take effect (`dsh web`, or `dsh --profile web`).
+
+> **Prerequisites** — Node.js >= 20. The plugin's only runtime npm dependency is
+> `@deepseek-ai/schemastery`. The `@deepseek-ai/dsh-web`, `@deepseek-ai/dsh-settings`,
+> and `@deepseek-ai/dsh-credentials` peers — plus `react` / `react-dom` /
+> `@deepseek-ai/cordis` — are provided by the DSH web runtime, no separate
+> install. The settings and credentials peers are optional: without them the
+> plugin still works composition-only / env-only.
+
+### From a local checkout (development)
 
 Run these from the checkout root:
 
 ```sh
 npm install        # tsdown / react / playwright-core (dev) + schemastery (runtime)
 npm run build      # bundles src/client/settings-card.tsx → lib/client.js
+dsh plugin --profile web add file:.
 ```
 
 The repo ships a pre-built `lib/client.js`, so installation works without a
 build; but **after editing `src/client/`, re-run `npm run build`** or the
-settings card will still serve the old bundle.
+settings card will still serve the old bundle. The `file:.` spec is anchored
+to your invoking directory, so run it from inside the checkout.
 
-### 2. Install into a profile
-
-Run this from inside the checkout:
-
-```sh
-dsh plugin --profile web add file:.
-```
-
-`dsh plugin add` forwards to `pnpm add` inside the profile directory, then
-reconciles `dsh.profile.bundles`: because this package declares
-`dsh.bundle.patch`, `dsh-web-search` is appended to the bundle stack
-automatically — no manual `cordis.patch.yml` edit to mount it. The `file:.`
-spec is anchored to your invoking directory, so run it from inside the
-checkout.
-
-### 3. Restart and verify
+### Verify
 
 ```sh
 dsh web --port 9000
@@ -59,13 +63,6 @@ configuration** to see the "Web search" card, or run a `web_search` /
 `web_fetch` to confirm. The bundle patch mounts the plugin and points
 `searchProvider` at it (`fetchProvider` stays on the built-in anonymous `http`
 provider until you opt in — free, no vendor credits).
-
-> **Requirements** — Node.js >= 20. The plugin's only runtime dependency is
-> `@deepseek-ai/schemastery` (installed from npm); the `@deepseek-ai/dsh-web`,
-> `@deepseek-ai/dsh-settings`, and `@deepseek-ai/dsh-credentials` peers are
-> provided by the harness tree the plugin runs inside. The settings and
-> credentials peers are optional: without them the plugin still works
-> composition-only / env-only.
 
 ## Configure (two layers)
 
